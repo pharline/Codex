@@ -1,0 +1,704 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>CROMEX | Reenvio de NF-e</title>
+
+    <style>
+      :root {
+        color-scheme: light;
+        font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+
+        /* Visual inspirado no site público da CROMEX (azuis/gradientes e "bolhas") */
+        --cx-blue-900: #0b2f5b;
+        --cx-blue-800: #0b3d7a;
+        --cx-blue-700: #0a4ea3;
+        --cx-blue-600: #0b63c7;
+        --cx-cyan-500: #22c1dc;
+
+        --cx-ink: #0f172a;
+        --cx-muted: #5b6b82;
+        --cx-border: rgba(148, 163, 184, 0.35);
+        --cx-card: rgba(255, 255, 255, 0.92);
+        --cx-card-2: rgba(248, 250, 252, 0.88);
+      }
+
+      body {
+        margin: 0;
+        padding: 32px;
+        color: var(--cx-ink);
+        background:
+          radial-gradient(1000px 600px at 10% -10%, rgba(34, 193, 220, 0.22), transparent 60%),
+          radial-gradient(1000px 600px at 90% 0%, rgba(11, 99, 199, 0.22), transparent 55%),
+          linear-gradient(160deg, #e9f3ff 0%, #f6fbff 45%, #f2f7ff 100%);
+      }
+
+      main {
+        max-width: 980px;
+        margin: 0 auto;
+        border-radius: 18px;
+        overflow: hidden;
+        box-shadow: 0 20px 60px rgba(15, 23, 42, 0.12);
+        border: 1px solid rgba(148, 163, 184, 0.35);
+        background: rgba(255, 255, 255, 0.65);
+        backdrop-filter: blur(8px);
+      }
+
+      /* ===== Header / Brand ===== */
+      header {
+        padding: 22px 26px;
+        background:
+          radial-gradient(900px 420px at 20% 0%, rgba(34, 193, 220, 0.35), transparent 60%),
+          radial-gradient(900px 420px at 80% 0%, rgba(11, 99, 199, 0.55), transparent 60%),
+          linear-gradient(135deg, var(--cx-blue-900), var(--cx-blue-700));
+        color: #fff;
+        position: relative;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        flex-wrap: wrap;
+      }
+
+      .brand-left {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        min-width: 280px;
+      }
+
+      .brand-title {
+        display: grid;
+        gap: 2px;
+      }
+
+      .brand-title h1 {
+        margin: 0;
+        font-size: 20px;
+        letter-spacing: 0.2px;
+      }
+
+      .brand-title p {
+        margin: 0;
+        font-size: 13px;
+        opacity: 0.9;
+      }
+
+      .brand-title p2 {
+        margin: 0;
+        font-size: 13px;
+        opacity: 0.9;
+      }
+
+      .badge {
+        font-size: 12px;
+        font-weight: 700;
+        padding: 7px 12px;
+        border-radius: 999px;
+        color: #08324f;
+        background: rgba(255, 255, 255, 0.9);
+        border: 1px solid rgba(255, 255, 255, 0.65);
+      }
+
+      header::after {
+        content: "";
+        position: absolute;
+        right: -120px;
+        top: -120px;
+        width: 320px;
+        height: 320px;
+        background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.35), rgba(255,255,255,0.08) 55%, transparent 70%);
+        border-radius: 999px;
+        pointer-events: none;
+      }
+
+      .cx-logo {
+        width: 56px;
+        height: 40px;
+        flex: 0 0 auto;
+        filter: drop-shadow(0 10px 18px rgba(0,0,0,0.18));
+      }
+
+      /* ===== Content ===== */
+      .content {
+        padding: 26px;
+      }
+
+      section {
+        margin-top: 18px;
+        padding: 20px;
+        border-radius: 14px;
+        border: 1px solid var(--cx-border);
+        background: var(--cx-card);
+      }
+
+      section + section {
+        background: var(--cx-card-2);
+      }
+
+      h2 {
+        margin: 0 0 10px;
+        font-size: 16px;
+        color: #0b2f5b;
+      }
+
+      p {
+        margin: 0;
+        color: var(--cx-muted);
+        font-size: 14px;
+        line-height: 1.45;
+        color: #0f172a;
+      }
+
+      p2 {
+        margin: 0;
+        color: var(--cx-muted);
+        font-size: 14px;
+        line-height: 1.45;
+        color: #e9f3ff;
+      }
+
+        .hint {
+        margin-top: 10px;
+        padding: 12px;
+        border-radius: 12px;
+        background: #eef2ff;
+        border: 1px solid #c7d2fe;
+        color: #3730a3;
+        font-size: 13px;
+      }
+
+      label {
+        display: block;
+        font-weight: 700;
+        margin-bottom: 6px;
+        font-size: 13px;
+        color: #0b2f5b;
+      }
+
+      input,
+      textarea {
+        width: 100%;
+        padding: 12px;
+        border-radius: 12px;
+        border: 1px solid rgba(148, 163, 184, 0.55);
+        background: rgba(255, 255, 255, 0.95);
+        font-size: 14px;
+        box-sizing: border-box;
+        outline: none;
+      }
+
+      input:focus,
+      textarea:focus {
+        border-color: rgba(11, 99, 199, 0.65);
+        box-shadow: 0 0 0 4px rgba(11, 99, 199, 0.14);
+      }
+
+      textarea {
+        min-height: 220px;
+        resize: vertical;
+        font-family: "Fira Code", "Courier New", monospace;
+        line-height: 1.35;
+      }
+
+      .grid {
+        display: grid;
+        gap: 16px;
+      }
+
+      .grid-2 {
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      }
+
+      .row {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+
+      button {
+        padding: 12px 18px;
+        border-radius: 12px;
+        border: 1px solid rgba(255,255,255,0.18);
+        background: linear-gradient(135deg, var(--cx-blue-600), var(--cx-cyan-500));
+        color: #fff;
+        font-weight: 800;
+        cursor: pointer;
+        box-shadow: 0 14px 30px rgba(11, 99, 199, 0.18);
+        transition: transform 0.05s ease, filter 0.2s ease, opacity 0.2s ease;
+      }
+
+      button:hover {
+        filter: brightness(1.03);
+      }
+
+      button:active {
+        transform: translateY(1px);
+      }
+
+      button.secondary {
+        background: linear-gradient(135deg, #0b2f5b, #0a4ea3);
+        box-shadow: 0 14px 30px rgba(11, 47, 91, 0.16);
+      }
+
+      button:disabled {
+        opacity: 0.65;
+        cursor: not-allowed;
+      }
+
+      .status {
+        font-size: 13px;
+        font-weight: 800;
+      }
+
+      .status.success {
+        color: #0f766e;
+      }
+
+      .status.error {
+        color: #b91c1c;
+      }
+
+      .footer {
+        padding: 16px 26px 22px;
+        font-size: 12px;
+        color: #6b7a90;
+        text-align: center;
+        border-top: 1px solid rgba(148, 163, 184, 0.25);
+        background: rgba(255,255,255,0.6);
+      }
+
+      .footer strong {
+        color: #0b2f5b;
+      }
+
+      /* ===== Modal confirmação ===== */
+      #confirmOverlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(15, 23, 42, 0.55);
+        backdrop-filter: blur(3px);
+        display: none; /* controlado via JS */
+        align-items: center;
+        justify-content: center;
+        z-index: 999;
+        padding: 18px;
+      }
+
+      .confirm-modal {
+        width: min(760px, 96vw);
+        background: rgba(255, 255, 255, 0.96);
+        border-radius: 16px;
+        padding: 22px;
+        box-shadow: 0 30px 80px rgba(15, 23, 42, 0.35);
+        border: 1px solid rgba(148, 163, 184, 0.35);
+      }
+
+      .confirm-modal h3 {
+        margin: 0 0 8px;
+        color: #0b2f5b;
+        font-size: 18px;
+      }
+
+      .confirm-text {
+        font-size: 14px;
+        color: #475569;
+        margin: 0 0 14px;
+        line-height: 1.45;
+      }
+
+      .confirm-meta {
+        display: grid;
+        gap: 10px;
+        margin-bottom: 12px;
+        padding: 12px;
+        border-radius: 14px;
+        border: 1px solid rgba(148, 163, 184, 0.35);
+        background: rgba(248, 250, 252, 0.9);
+      }
+
+      .confirm-meta .item {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        flex-wrap: wrap;
+        font-size: 13px;
+        color: #334155;
+      }
+
+      .confirm-meta .item strong {
+        color: #0b2f5b;
+      }
+
+      #confirmPreview {
+        margin-top: 6px;
+        background: #0f172a;
+        color: #e5e7eb;
+        padding: 14px;
+        border-radius: 12px;
+        max-height: 260px;
+        overflow: auto;
+        font-size: 12px;
+        line-height: 1.4;
+        white-space: pre;
+      }
+
+      .confirm-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+        margin-top: 16px;
+        flex-wrap: wrap;
+      }
+
+      .kbd-hint {
+        font-size: 12px;
+        color: #64748b;
+        margin-top: 8px;
+      }
+
+      .kbd-hint kbd {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+        font-size: 11px;
+        padding: 2px 6px;
+        border: 1px solid rgba(148, 163, 184, 0.55);
+        border-bottom-width: 2px;
+        border-radius: 8px;
+        background: rgba(255,255,255,0.9);
+      }
+    </style>
+  </head>
+
+  <body>
+    <main>
+      <header>
+        <div class="brand">
+          <div class="brand-left">
+            <!-- Logo inline (substitua por <img src="..."> se tiver o arquivo oficial) -->
+            <svg class="cx-logo" viewBox="0 0 220 160" xmlns="http://www.w3.org/2000/svg" aria-label="Cromex">
+              <defs>
+                <radialGradient id="g1" cx="30%" cy="30%" r="70%">
+                  <stop offset="0%" stop-color="#7be7ff" stop-opacity="0.95"/>
+                  <stop offset="55%" stop-color="#0b63c7" stop-opacity="0.95"/>
+                  <stop offset="100%" stop-color="#0b2f5b" stop-opacity="0.98"/>
+                </radialGradient>
+                <radialGradient id="g2" cx="30%" cy="30%" r="70%">
+                  <stop offset="0%" stop-color="#9af0ff" stop-opacity="0.95"/>
+                  <stop offset="55%" stop-color="#22c1dc" stop-opacity="0.95"/>
+                  <stop offset="100%" stop-color="#0a4ea3" stop-opacity="0.98"/>
+                </radialGradient>
+              </defs>
+              <circle cx="95" cy="80" r="70" fill="url(#g1)"/>
+              <circle cx="145" cy="80" r="70" fill="url(#g2)" opacity="0.95"/>
+              <text x="56" y="92" font-family="Segoe UI, Arial, sans-serif" font-size="44" font-weight="800" fill="#ffffff">
+                cromex
+              </text>
+            </svg>
+
+            <div class="brand-title">
+              <h1>Reenvio de NF-e para Emissão</h1>
+              <p2>Portal interno CROMEX · Homologação (API Outbound)</p2>
+            </div>
+          </div>
+
+          <div class="badge">HOMOLOGAÇÃO</div>
+        </div>
+      </header>
+
+      <div class="content">
+        <section>
+          <h2>1. Login</h2>
+          <p>Faça o login para obter o token e prosseguir com o envio da requisição JSON para a API de emissão.</p>
+
+          <div class="hint">
+            <strong>Observação:</strong> utilize apenas usuário credenciado pela TI da CROMEX.<br>
+            Este portal não armazena senha; a autenticação é feita diretamente no endpoint de login.
+          </div>
+
+          <div class="grid grid-2" style="margin-top: 14px;">
+            <div>
+              <label for="username">Usuário</label>
+              <input id="username" type="text" placeholder="seu usuario credenciado" autocomplete="username" />
+            </div>
+            <div>
+              <label for="password">Senha</label>
+              <input id="password" type="password" placeholder="sua senha" autocomplete="current-password" />
+            </div>
+          </div>
+
+          <div class="row" style="margin-top: 16px;">
+            <button id="loginButton">Entrar e obter token</button>
+            <span id="loginStatus" class="status"></span>
+          </div>
+
+          <input id="token" type="hidden" />
+          <input id="accessToken" type="hidden" />
+          <input id="refreshToken" type="hidden" />
+        </section>
+
+        <section>
+          <h2>2. Payload de Envio - NF-e</h2>
+          <p>Forneça o JSON com as correções necessárias para reenvio.</p>
+
+          <div class="hint">
+            <strong>Observação:</strong> Reforçando que este documento sera reenviado no ambiente de <b>HOMOLOGAÇÃO</b> da CROMEX.
+          </div>
+
+          <div style="margin-top: 16px;">
+            <label for="requestBody">Body JSON</label>
+            <textarea id="requestBody" placeholder="Cole aqui o JSON da requisição que deseja enviar"></textarea>
+          </div>
+
+          <div class="row" style="margin-top: 16px;">
+            <button id="sendButton">Enviar requisição</button>
+            <button id="clearButton" class="secondary" type="button">Limpar</button>
+            <span id="sendStatus" class="status"></span>
+          </div>
+
+          <div style="margin-top: 16px;">
+            <label for="response">Resposta</label>
+            <textarea id="response" readonly></textarea>
+          </div>
+        </section>
+      </div>
+
+      <div class="footer">
+        <strong>CROMEX</strong> · Uso interno · Reenvio de NF-e via API
+      </div>
+    </main>
+
+    <!-- ===== MODAL DE CONFIRMAÇÃO (mesmo HTML) ===== -->
+    <div id="confirmOverlay" role="dialog" aria-modal="true" aria-labelledby="confirmTitle">
+      <div class="confirm-modal">
+        <h3 id="confirmTitle">Confirmar envio da requisição</h3>
+
+        <p class="confirm-text">
+          Você está prestes a reenviar uma <strong>NF-e</strong> para processamento.
+          Confirme se o conteúdo abaixo está correto antes de prosseguir.
+        </p>
+
+        <div class="confirm-meta">
+          <div class="item">
+            <strong>Endpoint</strong>
+            <span id="confirmEndpoint"></span>
+          </div>
+          <div class="item">
+            <strong>Tamanho do Body</strong>
+            <span id="confirmSize"></span>
+          </div>
+        </div>
+
+        <label>Body JSON (pré-visualização)</label>
+        <pre id="confirmPreview"></pre>
+
+        <div class="confirm-actions">
+          <button id="cancelConfirm" class="secondary" type="button">Cancelar</button>
+          <button id="confirmSend" type="button">Confirmar envio</button>
+        </div>
+
+        <div class="kbd-hint">
+          Dica: <kbd>Esc</kbd> cancela · <kbd>Enter</kbd> confirma
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const loginButton = document.getElementById("loginButton");
+      const sendButton = document.getElementById("sendButton");
+      const clearButton = document.getElementById("clearButton");
+
+      const loginStatus = document.getElementById("loginStatus");
+      const sendStatus = document.getElementById("sendStatus");
+
+      const tokenBox = document.getElementById("token");
+      const accessTokenBox = document.getElementById("accessToken");
+      const refreshTokenBox = document.getElementById("refreshToken");
+
+      const requestBody = document.getElementById("requestBody");
+      const responseBox = document.getElementById("response");
+
+      const apiKey = "e8d0ec88-2145-4624-9e02-e78c571f65af";
+      const authUrl = "https://hom.api.orbitspot.com/auth";
+      const requestUrl = "https://hom.api.orbitspot.com/documentservice/api/nfe/requestEmit";
+
+      // Modal elements
+      const confirmOverlay = document.getElementById("confirmOverlay");
+      const confirmPreview = document.getElementById("confirmPreview");
+      const confirmSendBtn = document.getElementById("confirmSend");
+      const cancelConfirmBtn = document.getElementById("cancelConfirm");
+      const confirmEndpoint = document.getElementById("confirmEndpoint");
+      const confirmSize = document.getElementById("confirmSize");
+
+      requestBody.value = "";
+
+      const setStatus = (element, message, type) => {
+        element.textContent = message;
+        element.classList.remove("success", "error");
+        if (type) element.classList.add(type);
+      };
+
+      const safeJsonPretty = (rawText) => {
+        try {
+          const parsed = JSON.parse(rawText);
+          return JSON.stringify(parsed, null, 2);
+        } catch {
+          return rawText;
+        }
+      };
+
+      const openConfirmModal = () => {
+        confirmOverlay.style.display = "flex";
+        // foco no botão de confirmar por acessibilidade
+        setTimeout(() => confirmSendBtn.focus(), 0);
+      };
+
+      const closeConfirmModal = () => {
+        confirmOverlay.style.display = "none";
+      };
+
+      loginButton.addEventListener("click", async () => {
+        setStatus(loginStatus, "Autenticando...", null);
+        loginButton.disabled = true;
+
+        try {
+          const response = await fetch(authUrl, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "User-Agent": "cromex-web/1.0",
+            },
+            body: JSON.stringify({
+              username: document.getElementById("username").value,
+              password: document.getElementById("password").value,
+            }),
+          });
+
+          const data = await response.json().catch(() => ({}));
+          if (!response.ok) throw new Error(data.message || "Falha ao autenticar");
+
+          tokenBox.value = data.token || "";
+          accessTokenBox.value = data.accessToken || "";
+          refreshTokenBox.value = data.refreshToken || "";
+
+          if (!tokenBox.value) throw new Error("Autenticado, mas nenhum token foi retornado.");
+
+          setStatus(loginStatus, "Login realizado com sucesso!", "success");
+        } catch (error) {
+          setStatus(loginStatus, `Erro: ${error.message}`, "error");
+        } finally {
+          loginButton.disabled = false;
+        }
+      });
+
+      // ===== Pré-confirmação antes do envio =====
+      sendButton.addEventListener("click", () => {
+        try {
+          setStatus(sendStatus, "", null);
+
+          const tokenValue = tokenBox.value.trim();
+          if (!tokenValue) throw new Error("Faça o login para obter o token antes de enviar.");
+
+          const bodyText = requestBody.value.trim();
+          if (!bodyText) throw new Error("Cole o Body JSON antes de enviar.");
+
+          // valida JSON e formata para preview
+          const parsed = JSON.parse(bodyText);
+          const pretty = JSON.stringify(parsed, null, 2);
+
+          confirmEndpoint.textContent = requestUrl;
+          confirmSize.textContent = `${new Blob([pretty]).size} bytes`;
+          confirmPreview.textContent = pretty;
+
+          // guarda o body que será enviado (já validado e formatado)
+          sendButton.dataset.pendingBody = pretty;
+
+          openConfirmModal();
+        } catch (error) {
+          setStatus(sendStatus, `Erro: ${error.message}`, "error");
+        }
+      });
+
+      cancelConfirmBtn.addEventListener("click", () => {
+        sendButton.dataset.pendingBody = "";
+        closeConfirmModal();
+      });
+
+      // ESC fecha modal
+      document.addEventListener("keydown", (e) => {
+        if (confirmOverlay.style.display === "flex" && e.key === "Escape") {
+          sendButton.dataset.pendingBody = "";
+          closeConfirmModal();
+          sendButton.focus();
+        }
+      });
+
+      // Enter confirma (quando modal aberto)
+      document.addEventListener("keydown", (e) => {
+        if (confirmOverlay.style.display === "flex" && e.key === "Enter") {
+          // evita "Enter" em textarea disparar
+          if (document.activeElement && document.activeElement.tagName === "TEXTAREA") return;
+          confirmSendBtn.click();
+        }
+      });
+
+      confirmSendBtn.addEventListener("click", async () => {
+        setStatus(sendStatus, "Enviando...", null);
+        confirmSendBtn.disabled = true;
+        sendButton.disabled = true;
+        responseBox.value = "";
+        closeConfirmModal();
+
+        try {
+          const tokenValue = tokenBox.value.trim();
+          if (!tokenValue) throw new Error("Token ausente. Faça o login novamente.");
+
+          const pendingBody = (sendButton.dataset.pendingBody || "").trim();
+          if (!pendingBody) throw new Error("Body pendente não encontrado. Abra o modal novamente.");
+
+          const response = await fetch(requestUrl, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "User-Agent": "cromex-web/1.0",
+              token: tokenValue,
+              "x-api-key": apiKey,
+            },
+            body: pendingBody,
+          });
+
+          const rawText = await response.text();
+          responseBox.value = safeJsonPretty(rawText);
+
+          if (!response.ok) throw new Error(`Erro na requisição (${response.status})`);
+
+          setStatus(sendStatus, "Requisição enviada com sucesso!", "success");
+        } catch (error) {
+          setStatus(sendStatus, `Erro: ${error.message}`, "error");
+        } finally {
+          confirmSendBtn.disabled = false;
+          sendButton.disabled = false;
+          sendButton.dataset.pendingBody = "";
+        }
+      });
+
+      clearButton.addEventListener("click", () => {
+        requestBody.value = "";
+        responseBox.value = "";
+        setStatus(sendStatus, "", null);
+      });
+
+      // Clique fora do modal fecha (opcional)
+      confirmOverlay.addEventListener("click", (e) => {
+        if (e.target === confirmOverlay) {
+          sendButton.dataset.pendingBody = "";
+          closeConfirmModal();
+        }
+      });
+    </script>
+  </body>
+</html>
